@@ -17,28 +17,37 @@ Once the project moves into development, the press release can be used as a touc
  -->
  
 ## Heading ##
+  Cookie Scouter
   > Name the product in a way the reader (i.e. your target customers) will understand.
 
 ## Sub-Heading ##
+  This product allows users to find the nearest Girl Scout cookies.
   > Describe who the market for the product is and what benefit they get. One sentence only underneath the title.
 
 ## Summary ##
+  This product allows users to view all Girl Scout cookie stands near them using Google Maps.
   > Give a summary of the product and the benefit. Assume the reader will not read anything else so make this paragraph good.
 
 ## Problem ##
+  Many people love Girl Scout cookies but don't know any Girl Scouts, and are unaware of where/when Girl Scouts will be selling cookies.  This is a major problem for many people.
   > Describe the problem your product solves.
 
 ## Solution ##
+  This solves the Girl Scout cookie problem by pinning on Google Maps where the nearest Girl Scout cookie stand is, thus allowing users to find the nearest cookies.
   > Describe how your product elegantly solves the problem.
 
 ## Quote from You ##
+  "Cookie Scouter solves a major problem that plagues the average American during Girl Scout cookie season: Where can I purchase Thin Mints?"
   > A quote from a spokesperson in your company.
 
 ## How to Get Started ##
+  It is so easy to use Cookie Scouter!  Simply input your location, and the product will show where the nearest Girl Scout stand is.
   > Describe how easy it is to get started.
 
 ## Customer Quote ##
+  "I have an addiction to Thin Mints but I don't know any Girl Scouts whom I can buy from.  Now I can buy Thin Mints whenever I want!  Thanks Cookie Scouter!"
   > Provide a quote from a hypothetical customer that describes how they experienced the benefit.
 
 ## Closing and Call to Action ##
+  If you too are addicted to Girl Scout cookies, simply go to the Cookie Scouter site to input your location and get started!
   > Wrap it up and give pointers where the reader should go next.

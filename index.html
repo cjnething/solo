@@ -2,7 +2,24 @@
 <html>
   <head>
     <style type="text/css">
-      html, body, #map-canvas { height: 100%; margin: 0; padding: 0;}
+      html, body,
+        #topHead {
+          height: 100px;
+          margin-top: 20px;
+          padding: 0;
+          background-color: green;
+          font-family: Roboto;
+          color: white;
+          font-size: 150%;
+          text-align: center;
+          line-height: 100px;
+        }
+        #content {
+          color: black;
+          line-height: 20px;
+          font-size: 15px;
+        }
+        #map-canvas { height: 600px; margin: 0; padding: 0;}
         #pac-input {
         background-color: #fff;
         font-family: Roboto;
@@ -16,7 +33,7 @@
     </style>
     <title>Places search box</title>
     <script type="text/javascript"
-      src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places">
+      src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places&z=17">
     </script>
     <script type="text/javascript">
     function initialize() {
@@ -26,7 +43,14 @@
   var latLng = new google.maps.LatLng(37.783624, -122.408999);
       var mapOptions = {
            center: latLng,
-           zoom: 17
+           zoom: 17,
+           panControl:true,
+           zoomControl:true,
+           mapTypeControl:true,
+           scaleControl:true,
+           streetViewControl:true,
+           overviewMapControl:true,
+           rotateControl:true
          };
     var map = new google.maps.Map(document.getElementById('map-canvas'),
            mapOptions);
@@ -52,7 +76,7 @@
     }
 
     // For each place, get the icon, place name, and location.
-    markers = [];
+    //markers = [];
     var bounds = new google.maps.LatLngBounds();
     for (var i = 0, place; place = places[i]; i++) {
       var image = {
@@ -60,8 +84,7 @@
         size: new google.maps.Size(71, 71),
         origin: new google.maps.Point(0, 0),
         anchor: new google.maps.Point(17, 34),
-        scaledSize: new google.maps.Size(25, 25),
-        zoom: 17
+        scaledSize: new google.maps.Size(25, 25)
       };
 
       // Create a marker for each place.
@@ -69,19 +92,32 @@
       var marker = new google.maps.Marker({
         map: map,
         icon: image,
-        title: place.name,
+        title: "Girl Scout cookies at " + place.name,
         position: place.geometry.location,
-        title: "Thin Mints Here",
         draggable:true,
-        animation: google.maps.Animation.DROP
+        animation: google.maps.Animation.DROP,
       });
 
       markers.push(marker);
 
       bounds.extend(place.geometry.location);
+ 
     }
 
     map.fitBounds(bounds);
+
+        var contentString = '<div id="content">'+
+      'Girl Scout cookies are available here!'+
+      '</div>';
+
+  var infowindow = new google.maps.InfoWindow({
+      content: contentString
+  });
+
+  google.maps.event.addListener(marker, 'click', function() {
+    infowindow.open(map,marker);
+  });
+
   });
 
   // Bias the SearchBox results towards places that are within the bounds of the
@@ -89,14 +125,17 @@
   google.maps.event.addListener(map, 'bounds_changed', function() {
     var bounds = map.getBounds();
     searchBox.setBounds(bounds);
-    map.setZoom(17);
   });
+
+
+
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
     </script>
   </head>
   <body>
+    <div id="topHead">Girl Scout Cookies</div>
 <input id="pac-input" class="controls" type="text" placeholder="Search Box">
     <div id="map-canvas"></div>
   </body>

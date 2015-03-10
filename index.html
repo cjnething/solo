@@ -31,6 +31,35 @@
         width: 400px;
       }
 
+
+     .btn {
+      background: #3498db;
+      background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
+      background-image: -moz-linear-gradient(top, #3498db, #2980b9);
+      background-image: -ms-linear-gradient(top, #3498db, #2980b9);
+      background-image: -o-linear-gradient(top, #3498db, #2980b9);
+      background-image: linear-gradient(to bottom, #3498db, #2980b9);
+      -webkit-border-radius: 28;
+      -moz-border-radius: 28;
+      border-radius: 28px;
+      font-family: Georgia;
+      color: #ffffff;
+      font-size: 20px;
+      padding: 10px 20px 10px 20px;
+      text-decoration: none;
+      float: right;
+    }
+
+    .btn:hover {
+      background: #3cb0fd;
+      background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+      background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+      text-decoration: none;
+    }
+
     </style>
     <title>Places search box</title>
     <script type="text/javascript"
@@ -40,9 +69,11 @@
     <script type="text/javascript">
     
 var browserSupportFlag = new Boolean();
+var markers = [];
+    
     function initialize() {
 
-  var markers = [];
+  
 
   var hackReactor = new google.maps.LatLng(37.783624, -122.408999);
   var orlandoHouse = new google.maps.LatLng(28.491670, -81.489708);
@@ -125,18 +156,28 @@ var browserSupportFlag = new Boolean();
         scaledSize: new google.maps.Size(25, 25)
       };
 
+    for (var i = 0, marker; marker = markers[i]; i++) {
+        var currDate = new Date();
+        if (currDate.getTime() - marker.date.getTime() > 30000) {
+            marker.setMap(null);
+        }
+    }
+
       // Create a marker for each place.
-      var x = prompt("What cookies do they have here?");
-      var str = "Cookies sold at this location: " + x;
+      
     
-      var image = 'gsdiamond.png';
+      var image = 'images/gsdiamond.png';
       var marker = new google.maps.Marker({
         map: map,
         icon: image,
+        date: new Date(),
         title: "Girl Scout cookies at " + place.name,
         position: place.geometry.location,
         animation: google.maps.Animation.DROP,
       });
+
+      var cookieType = prompt("What cookies do they have here?");
+      var str = "<p>Cookies sold at this location: " + cookieType + "</p>" + "<p> Added at: " + marker.date + "</p>";
 
       markers.push(marker);
 
@@ -159,6 +200,8 @@ var browserSupportFlag = new Boolean();
     infowindow.open(map,marker);
   });
 
+
+
   });
 
   // Bias the SearchBox results towards places that are within the bounds of the
@@ -169,18 +212,23 @@ var browserSupportFlag = new Boolean();
   });
 
 
+
 }
 
 google.maps.event.addDomListener(window, 'load', initialize);
 
-var createMarker = function() {
-   var name = prompt("Hey there who are you?");
-   
-}
+ var createMarker = function() {
+     for (var i = 0, marker; marker = markers[i]; i++) {
+        var currDate = new Date();
+        if (currDate.getTime() - marker.date.getTime() > 30000) {
+            marker.setMap(null);
+        }
+    }
+ }
     </script>
   </head>
   <body>
-    <div id="topHead">Cookie Scouter</div>
+    <div id="topHead">Cookie Scouter <button class="btn" onclick="createMarker();">Update Girl Scout stand locations</button></div>
 <input id="pac-input" class="controls" type="text" placeholder="Add a new Girl Scout stand location here">
     <div id="map-canvas"></div>
   </body>

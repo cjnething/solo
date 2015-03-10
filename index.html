@@ -31,44 +31,23 @@
         width: 400px;
       }
 
-      .btn {
-      background: #3498db;
-      background-image: -webkit-linear-gradient(top, #3498db, #2980b9);
-      background-image: -moz-linear-gradient(top, #3498db, #2980b9);
-      background-image: -ms-linear-gradient(top, #3498db, #2980b9);
-      background-image: -o-linear-gradient(top, #3498db, #2980b9);
-      background-image: linear-gradient(to bottom, #3498db, #2980b9);
-      -webkit-border-radius: 28;
-      -moz-border-radius: 28;
-      border-radius: 28px;
-      font-family: Georgia;
-      color: #ffffff;
-      font-size: 20px;
-      padding: 10px 20px 10px 20px;
-      text-decoration: none;
-      float: right;
-    }
-
-    .btn:hover {
-      background: #3cb0fd;
-      background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
-      background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
-      background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
-      background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
-      background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
-      text-decoration: none;
-    }
     </style>
     <title>Places search box</title>
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places&z=17">
     </script>
+    <script>"https://api.twitter.com/1.1/statuses/update.json"</script>
     <script type="text/javascript">
+    
+var browserSupportFlag = new Boolean();
     function initialize() {
 
   var markers = [];
 
-  var latLng = new google.maps.LatLng(37.783624, -122.408999);
+  var hackReactor = new google.maps.LatLng(37.783624, -122.408999);
+  var orlandoHouse = new google.maps.LatLng(28.491670, -81.489708);
+  var latLng = orlandoHouse;
+
       var mapOptions = {
            center: latLng,
            zoom: 17,
@@ -83,25 +62,56 @@
     var map = new google.maps.Map(document.getElementById('map-canvas'),
            mapOptions);
 
+
+      if(navigator.geolocation) {
+    browserSupportFlag = true;
+    navigator.geolocation.getCurrentPosition(function(position) {
+      initialLocation = new google.maps.LatLng(position.coords.latitude,position.coords.longitude);
+      map.setCenter(initialLocation);
+    }, function() {
+      handleNoGeolocation(browserSupportFlag);
+    });
+  }
+  // Browser doesn't support Geolocation
+  else {
+    browserSupportFlag = false;
+    handleNoGeolocation(browserSupportFlag);
+  }
+
+  function handleNoGeolocation(errorFlag) {
+    if (errorFlag == true) {
+      alert("Geolocation service failed.");
+      initialLocation = orlandoHouse;
+    } else {
+      alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+      initialLocation = orlandoHouse;
+    }
+    map.setCenter(initialLocation);
+  }
+
+
+
+
   // Create the search box and link it to the UI element.
   var input = /** @type {HTMLInputElement} */(
       document.getElementById('pac-input'));
   map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
 
-  var searchBox = new google.maps.places.SearchBox(
-    /** @type {HTMLInputElement} */(input));
+  var searchBox = new google.maps.places.SearchBox((input));
+  /** @type {HTMLInputElement} */
 
   // Listen for the event fired when the user selects an item from the
   // pick list. Retrieve the matching places for that item.
   google.maps.event.addListener(searchBox, 'places_changed', function() {
     var places = searchBox.getPlaces();
 
+
     if (places.length == 0) {
       return;
     }
-    for (var i = 0, marker; marker = markers[i]; i++) {
-      marker.setMap(null);
-    }
+    // for (var i = 0, marker; marker = markers[i]; i++) {
+    //   marker.setMap(null);
+    // }
 
     // For each place, get the icon, place name, and location.
     //markers = [];
@@ -116,13 +126,15 @@
       };
 
       // Create a marker for each place.
+      var x = prompt("What cookies do they have here?");
+      var str = "Cookies sold at this location: " + x;
+    
       var image = 'gsdiamond.png';
       var marker = new google.maps.Marker({
         map: map,
         icon: image,
         title: "Girl Scout cookies at " + place.name,
         position: place.geometry.location,
-        draggable:true,
         animation: google.maps.Animation.DROP,
       });
 
@@ -133,10 +145,11 @@
     }
 
     map.fitBounds(bounds);
-
+        
+       
+      //var str = "At " + place.name + " they are selling " + x "!";
         var contentString = '<div id="content">'+
-      'Girl Scout cookies are available here!'+
-      '</div>';
+      str + '</div>';
 
   var infowindow = new google.maps.InfoWindow({
       content: contentString
@@ -161,14 +174,14 @@
 google.maps.event.addDomListener(window, 'load', initialize);
 
 var createMarker = function() {
-    alert("hey");
+   var name = prompt("Hey there who are you?");
+   
 }
     </script>
   </head>
   <body>
-    <div id="topHead">Girl Scout Cookies
-        <button class="btn" onclick="createMarker();">Add a new Girl Scout stand location</button></div>
-<input id="pac-input" class="controls" type="text" placeholder="Search Box">
+    <div id="topHead">Cookie Scouter</div>
+<input id="pac-input" class="controls" type="text" placeholder="Add a new Girl Scout stand location here">
     <div id="map-canvas"></div>
   </body>
 </html>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
     <style type="text/css">
       html, body,
         #topHead {
@@ -61,11 +62,16 @@
     }
 
     </style>
+    </head>
+          <body>
     <title>Places search box</title>
     <script type="text/javascript"
       src="https://maps.googleapis.com/maps/api/js?v=3.exp&signed_in=true&libraries=places&z=17">
     </script>
-    <script>"https://api.twitter.com/1.1/statuses/update.json"</script>
+   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="bootbox.js"></script>
+
     <script type="text/javascript">
     
 var browserSupportFlag = new Boolean();
@@ -111,10 +117,10 @@ var markers = [];
 
   function handleNoGeolocation(errorFlag) {
     if (errorFlag == true) {
-      alert("Geolocation service failed.");
+      //alert("Geolocation service failed.");
       initialLocation = orlandoHouse;
     } else {
-      alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
+      //alert("Your browser doesn't support geolocation. We've placed you in Siberia.");
       initialLocation = orlandoHouse;
     }
     map.setCenter(initialLocation);
@@ -137,9 +143,9 @@ var markers = [];
     var places = searchBox.getPlaces();
 
 
-    if (places.length == 0) {
-      return;
-    }
+    // if (places.length == 0) {
+    //   return;
+    // }
     // for (var i = 0, marker; marker = markers[i]; i++) {
     //   marker.setMap(null);
     // }
@@ -156,7 +162,12 @@ var markers = [];
         scaledSize: new google.maps.Size(25, 25)
       };
 
-    for (var i = 0, marker; marker = markers[i]; i++) {
+
+
+
+
+    var makeMarkers = function(manu, thinmint) {
+            for (var i = 0, marker; marker = markers[i]; i++) {
         var currDate = new Date();
         if (currDate.getTime() - marker.date.getTime() > 30000) {
             marker.setMap(null);
@@ -175,17 +186,12 @@ var markers = [];
         position: place.geometry.location,
         animation: google.maps.Animation.DROP,
       });
-
-      var cookieType = prompt("What cookies do they have here?");
-      var str = "<p>Cookies sold at this location: " + cookieType + "</p>" + "<p> Added at: " + marker.date + "</p>";
+     var str = "<p>Cookies sold here made by " + manu + " and thin mints are " + thinmint + "</p>" + "<p> Added at: " + marker.date + "</p>";
 
       markers.push(marker);
 
       bounds.extend(place.geometry.location);
- 
-    }
-
-    map.fitBounds(bounds);
+      map.fitBounds(bounds);
         
        
       //var str = "At " + place.name + " they are selling " + x "!";
@@ -199,7 +205,90 @@ var markers = [];
   google.maps.event.addListener(marker, 'click', function() {
     infowindow.open(map,marker);
   });
+ 
 
+
+    }
+
+    makeMarkers("ABC", "in stock");
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+var cookieprompt = "";
+
+
+
+bootbox.dialog({
+                title: "Thank you for updating the Girl Scout stand list!",
+                message: '<div class="row">  ' +
+                    '<div class="col-md-12"> ' +
+                    '<form class="form-horizontal"> ' +
+
+                    '<label class="col-md-4 control-label" for="manufacturer">Which manufacturer is sold here?</label> ' +
+                    '<div class="col-md-4"> <div class="radio"> <label for="manufacturer-0"> ' +
+                    '<input type="radio" name="manufacturer" id="manufacturer-0" value="ABC" checked="checked"> ' +
+                    'ABC Bakers </label> ' +
+
+                    '</div><div class="radio"> <label for="manufacturer-1"> ' +
+                    '<input type="radio" name="manufacturer" id="manufacturer-1" value="Brownie"> Little Brownie Bakers </label> ' +
+                    '</div> ' +
+                    '</div> </div>' +
+
+                    '<label class="col-md-4 control-label" for="awesomeness">Are Thin Mints in stock?</label> ' +
+                    '<div class="col-md-4"> <div class="radio"> <label for="awesomeness-0"> ' +
+
+                    '<input type="radio" name="awesomeness" id="awesomeness-0" value="in stock" checked="checked"> ' +
+                    'Yes of course! </label> ' +
+                    '</div><div class="radio"> <label for="awesomeness-1"> ' +
+
+                    '<input type="radio" name="awesomeness" id="awesomeness-1" value="not in stock"> No they sold out :( </label> ' +
+                    '</div> ' +
+                    '</div> </div>' +
+
+                    '</form> </div>  </div>',
+                buttons: {
+                    success: {
+                        label: "Save",
+                        className: "btn-success",
+                        callback: function () {
+                            manu = $("input[name='manufacturer']:checked").val();
+                            thinmint = $("input[name='awesomeness']:checked").val();
+                            //alert("Hello " + manu + ". You've chosen <b>" + thinmint + "</b>");
+                            cookieprompt = "This location is selling cookies made by " + manu + " and the Thin Mint status is " + thinmint;
+                            //alert(cookieprompt);
+                            
+                        }
+                    }
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+
+
+      //var cookieType = prompt("What cookies do they have here?");
+      //var str = "<p>Cookies sold at this location: " +  manu + "and " + thinmint + "</p>" + "<p> Added at: " + marker.date + "</p>";
+
+
+
+     
 
 
   });
@@ -220,14 +309,18 @@ google.maps.event.addDomListener(window, 'load', initialize);
  var createMarker = function() {
      for (var i = 0, marker; marker = markers[i]; i++) {
         var currDate = new Date();
-        if (currDate.getTime() - marker.date.getTime() > 30000) {
+        if (currDate.getTime() - marker.date.getTime() > 15000) {
             marker.setMap(null);
         }
     }
+
  }
+
+
+
     </script>
-  </head>
-  <body>
+ 
+ 
     <div id="topHead">Cookie Scouter <button class="btn" onclick="createMarker();">Update Girl Scout stand locations</button></div>
 <input id="pac-input" class="controls" type="text" placeholder="Add a new Girl Scout stand location here">
     <div id="map-canvas"></div>
